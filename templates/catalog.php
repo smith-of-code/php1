@@ -3,6 +3,7 @@
 <div>
     <? foreach ($catalog as $item): ?>
         <div>
+            <img src="" alt="">
             <?=$item['name']?><br>
             Цена: <?=$item['price']?><br>
             <button>Купить</button>
