@@ -1,4 +1,109 @@
 <?php
+
+function prepareVariables($page){
+    $navArr = [
+        [
+            'title' => 'Главная',
+            'link' => '/',
+        ],
+        [
+            'title' => 'Каталог',
+            'link' => '/?page=catalog',
+        ],
+        [
+            'title' => 'Галлерея',
+            'link' => '/?page=gallery',
+        ],
+        [
+            'title' => 'Сабменю1',
+            'link' => '#',
+            'subitem' => [
+                [
+                    'title' => 'Главная',
+                    'link' => '/',
+                ],
+                [
+                    'title' => 'Каталог',
+                    'link' => '/?page=catalog',
+                ],
+                [
+                    'title' => 'Контакты',
+                    'link' => '/?page=contacts',
+                    'subitem' => [
+                        [
+                            'title' => 'Главная',
+                            'link' => '/',
+                        ],
+                        [
+                            'title' => 'Каталог',
+                            'link' => '/?page=catalog',
+                        ],
+                        [
+                            'title' => 'Контакты',
+                            'link' => '/?page=contacts',
+                        ]
+                    ]
+                ]
+            ]
+        ],
+    ];
+    $params = [
+        'login' => 'admin',
+        'nav' => renderMenu($navArr)
+    ];
+
+    switch ($page) {
+        case 'index':
+            $params['name'] = 'Клен';
+            break;
+        case 'catalog':
+            $params['catalog'] = [
+                [
+                    'name' => 'Пицца',
+                    'price' => 24
+                ],
+                [
+                    'name' => 'Чай',
+                    'price' => 1
+                ],
+                [
+                    'name' => 'Яблоко',
+                    'price' => 12
+                ],
+            ];
+            break;
+        case 'gallery':
+            $params['gallery'] = getGallery(GALLERY_DIR);
+            break;
+        case 'image':
+            $content = getGalleryItem($_GET['id']);
+            $params['imageItem'] = $content['name'];
+            $params['views'] = $content['views'];
+            break;
+        case 'apicatalog':
+            $params['catalog'] = [
+                [
+                    'name' => 'Пицца',
+                    'price' => 24
+                ],
+
+                [
+                    'name' => 'Яблоко',
+                    'price' => 12
+                ],
+            ];
+
+            echo json_encode($params, JSON_UNESCAPED_UNICODE);
+            exit;
+            break;
+
+    }
+
+    return $params;
+
+}
+
+
 function render($page, $params = [])
 {
     return renderTemplate(LAYOUTS_DIR . 'main', [
@@ -37,9 +142,7 @@ function renderMenu($menu){
     return $result;
 }
 
-function getGallery($folder){
-    return array_slice(scandir($folder .'/small'), 2);
-}
+
 
 
 
