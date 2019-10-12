@@ -1,3 +1,5 @@
-<ul class="menu"><?=$nav?></ul>
+<ul class="menu">
+    <?=$nav?>
+</ul>
 
 

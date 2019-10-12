@@ -82,7 +82,7 @@ switch ($page) {
         ];
         break;
     case 'gallery':
-        $params['gallery'] = renderGallery(GALLERY_DIR);
+        $params['gallery'] = getGallery(GALLERY_DIR);
         break;
         case 'apicatalog':
         $params['catalog'] = [
