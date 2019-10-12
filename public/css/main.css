@@ -41,4 +41,15 @@ body {
   color: white;
   text-align: center; }
 
+.gallery {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap; }
+  .gallery__item {
+    margin: 5px;
+    transition: all 0.3s; }
+    .gallery__item:hover {
+      transform: scale(1.2); }
+
 /*# sourceMappingURL=main.css.map */
