@@ -13,6 +13,7 @@ define('DB','php1');
 
 require_once DIR_ROOT . "/engine/db.php";
 require_once DIR_ROOT . "/engine/functions.php";
+require_once DIR_ROOT . "/engine/menu.php";
 require_once DIR_ROOT . "/engine/gallery.php";
 
 

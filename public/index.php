@@ -4,12 +4,13 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/config.php';
 
 dumpLoad();
 
-if (isset($_GET['page'])) {
-    $page = $_GET['page'];
-} else {
-    $page = 'index';
-}
+$url_array = explode("/", $_SERVER['REQUEST_URI']);
 
+if ($url_array[1] == "") {
+    $page = 'index';
+} else {
+    $page = $url_array[1];
+}
 
 
 $params = prepareVariables($page);

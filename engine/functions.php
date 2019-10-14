@@ -8,11 +8,11 @@ function prepareVariables($page){
         ],
         [
             'title' => 'Каталог',
-            'link' => '/?page=catalog',
+            'link' => '/catalog',
         ],
         [
             'title' => 'Галлерея',
-            'link' => '/?page=gallery',
+            'link' => '/gallery',
         ],
         [
             'title' => 'Сабменю1',
@@ -24,11 +24,11 @@ function prepareVariables($page){
                 ],
                 [
                     'title' => 'Каталог',
-                    'link' => '/?page=catalog',
+                    'link' => '/catalog',
                 ],
                 [
                     'title' => 'Контакты',
-                    'link' => '/?page=contacts',
+                    'link' => '/contacts',
                     'subitem' => [
                         [
                             'title' => 'Главная',
@@ -36,11 +36,11 @@ function prepareVariables($page){
                         ],
                         [
                             'title' => 'Каталог',
-                            'link' => '/?page=catalog',
+                            'link' => '/catalog',
                         ],
                         [
                             'title' => 'Контакты',
-                            'link' => '/?page=contacts',
+                            'link' => '/contacts',
                         ]
                     ]
                 ]
@@ -76,7 +76,7 @@ function prepareVariables($page){
             $params['gallery'] = getGallery(GALLERY_DIR);
             break;
         case 'image':
-            $content = getGalleryItem($_GET['id']);
+            $content = getGalleryItem(explode("/", $_SERVER['REQUEST_URI'])[2]);
             $params['imageItem'] = $content['name'];
             $params['views'] = $content['views'];
             break;
@@ -127,23 +127,6 @@ function renderTemplate($page, $params = [])
 
     return ob_get_clean();
 }
-
-function renderMenu($menu){
-    $result = "";
-    foreach ($menu as $item) {
-            if (isset($item['subitem'])){
-                $result .=
-                    "<li class='menu__item drop__item'><a href='{$item['link']}'>{$item['title']}</a><ul class='sub__menu'>".
-                renderMenu($item['subitem']) ."</ul></li>";
-            }else{
-                $result .= "<li class='menu__item'><a href='{$item['link']}'>{$item['title']}</a></li>";
-            }
-    }
-    return $result;
-}
-
-
-
 
 
 
