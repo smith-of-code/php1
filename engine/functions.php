@@ -13,7 +13,7 @@ function renderTemplate($page, $params = [])
     if (!is_null($params))
         extract($params);
 
-    $fileName = TEMPLATES_DIR . $page . ".php";
+    $fileName = TEMPLATES_DIR . "$page.php";
     if (file_exists($fileName)) {
         include $fileName;
     } else {
@@ -27,7 +27,8 @@ function renderMenu($menu){
     $result = "";
     foreach ($menu as $item) {
             if (isset($item['subitem'])){
-                $result .= "<li class='menu__item drop__item'><a href='{$item['link']}'>{$item['title']}</a><ul class='sub__menu'>".
+                $result .=
+                    "<li class='menu__item drop__item'><a href='{$item['link']}'>{$item['title']}</a><ul class='sub__menu'>".
                 renderMenu($item['subitem']) ."</ul></li>";
             }else{
                 $result .= "<li class='menu__item'><a href='{$item['link']}'>{$item['title']}</a></li>";
@@ -36,17 +37,10 @@ function renderMenu($menu){
     return $result;
 }
 
-function renderGallery($folder){
-    $result = '<div class="gallery">';
-    $imgFolderBig = array_slice(scandir($folder .'/big'), 2);
-    foreach ($imgFolderBig as $item){
-    $result .= "<a class='gallery__item' href='". $folder . "/big/". $item . "'><img src='". $folder . "/small/".
-        $item .  "'></a>" ;
-    }
-    $result .= '</div>';
-    return $result;
+function getGallery($folder){
+    return array_slice(scandir($folder .'/small'), 2);
 }
-?>
+
 
 
 
