@@ -1,57 +1,12 @@
 <?php
 
 function prepareVariables($page){
-    $navArr = [
-        [
-            'title' => 'Главная',
-            'link' => '/',
-        ],
-        [
-            'title' => 'Каталог',
-            'link' => '/catalog',
-        ],
-        [
-            'title' => 'Галлерея',
-            'link' => '/gallery',
-        ],
-        [
-            'title' => 'Сабменю1',
-            'link' => '#',
-            'subitem' => [
-                [
-                    'title' => 'Главная',
-                    'link' => '/',
-                ],
-                [
-                    'title' => 'Каталог',
-                    'link' => '/catalog',
-                ],
-                [
-                    'title' => 'Контакты',
-                    'link' => '/contacts',
-                    'subitem' => [
-                        [
-                            'title' => 'Главная',
-                            'link' => '/',
-                        ],
-                        [
-                            'title' => 'Каталог',
-                            'link' => '/catalog',
-                        ],
-                        [
-                            'title' => 'Контакты',
-                            'link' => '/contacts',
-                        ]
-                    ]
-                ]
-            ]
-        ],
-    ];
+
     $params = [
         'login' => 'admin',
-        'nav' => renderMenu($navArr)
-    ];
+        'nav' => getMenu()
 
+    ];
     switch ($page) {
         case 'index':
             $params['name'] = 'Клен';
