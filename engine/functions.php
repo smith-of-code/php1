@@ -1,6 +1,6 @@
 <?php
 
-function prepareVariables($page){
+function prepareVariables($page,$action,$id){
 
     $params = [
         'login' => 'admin',
@@ -12,26 +12,18 @@ function prepareVariables($page){
             $params['name'] = 'Клен';
             break;
         case 'catalog':
-            $params['catalog'] = [
-                [
-                    'name' => 'Пицца',
-                    'price' => 24
-                ],
-                [
-                    'name' => 'Чай',
-                    'price' => 1
-                ],
-                [
-                    'name' => 'Яблоко',
-                    'price' => 12
-                ],
-            ];
+            $params['catalog'] = getCatalog();
+            break;
+        case 'product':
+            $params['product'] = getProduct($id);
+
             break;
         case 'gallery':
-            $params['gallery'] = getGallery(GALLERY_DIR);
+            $params['gallery'] = getGallery();
             break;
         case 'image':
-            $content = getGalleryItem(explode("/", $_SERVER['REQUEST_URI'])[2]);
+            incrimentViews($id);
+            $content = getGalleryItem($id);
             $params['imageItem'] = $content['name'];
             $params['views'] = $content['views'];
             break;
