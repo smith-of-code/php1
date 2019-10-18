@@ -16,8 +16,11 @@ function prepareVariables($page,$action,$id){
             break;
         case 'product':
             $params['product'] = getProduct($id);
-
+            $params['feedback'] = getFeedback($id);
             break;
+        case 'feedback':
+            addFeedback($id);
+
         case 'gallery':
             $params['gallery'] = getGallery();
             break;

@@ -1,6 +1,6 @@
 <?php
 function getCatalog(){
-    $sql = "SELECT * FROM products";
+    $sql ='SELECT * FROM products';
     $catalog = getAssocResult($sql);
     return $catalog;
 }
