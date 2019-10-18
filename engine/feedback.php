@@ -5,19 +5,33 @@ function getAllfeedback(){
     return $allFeedback;
 }
 
-function getFeedback($id){
-    $sql = "SELECT * FROM  feedback where product_id = '$id'";
-    return getAssocResult($sql);
-}
-function addFeedback($id){
+function doFeedbackAction($id, $action = 'read'){
     $id = (int)$id;
-    $name = $_POST['name'];
-    $content = $_POST['content'];
 
-    $sql = "INSERT INTO `feedback` (`id`, `product_id`, `name`, `content`, `date`) VALUES (NULL, $id, '$name', 
+    if ($action === 'add'){
+        $name = strip_tags(htmlspecialchars(mysqli_real_escape_string(getDb(),$_POST['name'])));
+        $content = strip_tags(htmlspecialchars(mysqli_real_escape_string(getDb(),$_POST['content'])));
+
+        $sql = "INSERT INTO `feedback` (`id`, `product_id`, `name`, `content`, `date`) VALUES (NULL, $id, '$name', 
     '$content', CURRENT_DATE()); ";
-    executeQuery($sql);
-    $redicet = $_SERVER['HTTP_REFERER'];
-    header ("Location: $redicet");
-}
 
+        executeQuery($sql);
+
+        $redicet = $_SERVER['HTTP_REFERER'];
+        header ("Location: $redicet");
+    }
+    if ($action === 'delete'){
+        $sql = "DELETE FROM `feedback` where id = $id";
+        executeQuery($sql);
+        $redicet = $_SERVER['HTTP_REFERER'];
+        header ("Location: $redicet");
+    }
+    if ($action === 'update'){
+
+    }
+    if ($action === 'read'){
+        $sql = "SELECT * FROM  feedback where product_id = '$id'";
+        return getAssocResult($sql);
+    }
+
+}

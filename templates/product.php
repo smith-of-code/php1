@@ -23,6 +23,7 @@
     <h4>Имя: <?=$item['name']?></h4>
 <p>Текст: <?=$item['content']?></p>
 <p>Дата: <?=$item['date']?></p>
-<button>X</button>
+<a href="/feedback/delete/<?=$item['id']?>">X</a>
+    <a href="/feedback/update/<?=$item['id']?>">Редактировать</a>
 <? endforeach;?>
 </div>
