@@ -1,4 +1,64 @@
 <?php
+
+function prepareVariables($page){
+
+    $params = [
+        'login' => 'admin',
+        'nav' => getMenu()
+
+    ];
+    switch ($page) {
+        case 'index':
+            $params['name'] = 'Клен';
+            break;
+        case 'catalog':
+            $params['catalog'] = [
+                [
+                    'name' => 'Пицца',
+                    'price' => 24
+                ],
+                [
+                    'name' => 'Чай',
+                    'price' => 1
+                ],
+                [
+                    'name' => 'Яблоко',
+                    'price' => 12
+                ],
+            ];
+            break;
+        case 'gallery':
+            $params['gallery'] = getGallery(GALLERY_DIR);
+            break;
+        case 'image':
+            $content = getGalleryItem(explode("/", $_SERVER['REQUEST_URI'])[2]);
+            $params['imageItem'] = $content['name'];
+            $params['views'] = $content['views'];
+            break;
+        case 'apicatalog':
+            $params['catalog'] = [
+                [
+                    'name' => 'Пицца',
+                    'price' => 24
+                ],
+
+                [
+                    'name' => 'Яблоко',
+                    'price' => 12
+                ],
+            ];
+
+            echo json_encode($params, JSON_UNESCAPED_UNICODE);
+            exit;
+            break;
+
+    }
+
+    return $params;
+
+}
+
+
 function render($page, $params = [])
 {
     return renderTemplate(LAYOUTS_DIR . 'main', [
@@ -22,25 +82,6 @@ function renderTemplate($page, $params = [])
 
     return ob_get_clean();
 }
-
-function renderMenu($menu){
-    $result = "";
-    foreach ($menu as $item) {
-            if (isset($item['subitem'])){
-                $result .=
-                    "<li class='menu__item drop__item'><a href='{$item['link']}'>{$item['title']}</a><ul class='sub__menu'>".
-                renderMenu($item['subitem']) ."</ul></li>";
-            }else{
-                $result .= "<li class='menu__item'><a href='{$item['link']}'>{$item['title']}</a></li>";
-            }
-    }
-    return $result;
-}
-
-function getGallery($folder){
-    return array_slice(scandir($folder .'/small'), 2);
-}
-
 
 
 
