@@ -30,6 +30,9 @@ function prepareVariables($page,$action,$id){
             $params['imageItem'] = $content['name'];
             $params['views'] = $content['views'];
             break;
+        case 'calculator':
+            $params['calculate'] = mathOperation();
+            break;
         case 'apicatalog':
             $params['catalog'] = [
                 [

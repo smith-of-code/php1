@@ -18,5 +18,6 @@ require_once DIR_ROOT . "/engine/menu.php";
 require_once DIR_ROOT . "/engine/gallery.php";
 require_once DIR_ROOT . "/engine/catalog.php";
 require_once DIR_ROOT . "/engine/feedback.php";
+require_once DIR_ROOT . "/engine/calculator.php";
 
 
