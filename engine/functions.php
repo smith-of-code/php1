@@ -1,6 +1,6 @@
 <?php
 
-function prepareVariables($page){
+function prepareVariables($page,$action,$id){
 
     $params = [
         'login' => 'admin',
@@ -12,28 +12,33 @@ function prepareVariables($page){
             $params['name'] = 'Клен';
             break;
         case 'catalog':
-            $params['catalog'] = [
-                [
-                    'name' => 'Пицца',
-                    'price' => 24
-                ],
-                [
-                    'name' => 'Чай',
-                    'price' => 1
-                ],
-                [
-                    'name' => 'Яблоко',
-                    'price' => 12
-                ],
-            ];
+            $params['catalog'] = getCatalog();
+            break;
+        case 'product':
+            $params['product'] = getProduct($id);
+            $params['feedback'] = doFeedbackAction($id);
+            break;
+        case 'feedback':
+            doFeedbackAction($id, $action);
             break;
         case 'gallery':
-            $params['gallery'] = getGallery(GALLERY_DIR);
+            $params['gallery'] = getGallery();
             break;
         case 'image':
-            $content = getGalleryItem(explode("/", $_SERVER['REQUEST_URI'])[2]);
+            incrimentViews($id);
+            $content = getGalleryItem($id);
             $params['imageItem'] = $content['name'];
             $params['views'] = $content['views'];
+            break;
+        case 'calculator':
+            if (!empty($_POST)) {
+                $a = $_POST['first'];
+                $b = $_POST['second'];
+                $operation = $_POST['action'];
+                $params['calculate'] = mathOperation($a, $b, $operation);
+            } else {
+                $params['calculate'] = ['error' => ['Произведите рассчет']];
+            }
             break;
         case 'apicatalog':
             $params['catalog'] = [
