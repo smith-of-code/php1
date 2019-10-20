@@ -31,7 +31,14 @@ function prepareVariables($page,$action,$id){
             $params['views'] = $content['views'];
             break;
         case 'calculator':
-            $params['calculate'] = mathOperation();
+            if (!empty($_POST)) {
+                $a = $_POST['first'];
+                $b = $_POST['second'];
+                $operation = $_POST['action'];
+                $params['calculate'] = mathOperation($a, $b, $operation);
+            } else {
+                $params['calculate'] = ['error' => ['Произведите рассчет']];
+            }
             break;
         case 'apicatalog':
             $params['catalog'] = [
