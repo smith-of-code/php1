@@ -17,9 +17,10 @@ function renderMainMenu($menu){
     return $result;
 }
 ?>
-
+<p></p>
 <ul class="menu">
     <?= renderMainMenu($nav)?>
-</ul>
+    <li>товаров в корзине <?=$count?></li>
 
+</ul>
 
