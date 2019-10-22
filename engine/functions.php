@@ -5,25 +5,24 @@ function prepareVariables($page,$action,$id){
     $params = [
         'login' => 'admin',
         'nav' => getMenu(),
-        'count' => getCartCount()
+        'count' => getCartCount(),
 
     ];
     switch ($page) {
         case 'auth':
             if ($action == "login") {
-                if (isset($_GET['send'])) {
-                    $login = $_GET['login'];
-                    $pass = $_GET['pass'];
+                if (isset($_POST['send'])) {
+                    $login = $_POST['login'];
+                    $pass = $_POST['pass'];
 
                     if (!auth($login, $pass)) {
                         Die('Не верный логин пароль');
                     } else {
-                        if (isset($_GET['save'])) {
+                        if (isset($_POST['save'])) {
                             $hash = uniqid(rand(), true);
-                            $db = getDb();
-                            $id = mysqli_real_escape_string($db, strip_tags(stripslashes($_SESSION['id'])));
-                            $sql = "UPDATE `users` SET `hash` = '{$hash}' WHERE `users`.`id` = {$id}";
-                            $result = mysqli_query($db, $sql);
+                            $id = mysqli_real_escape_string(getDb(), strip_tags(stripslashes($_SESSION['id'])));
+                            $sql = "UPDATE `users` SET hash = '{$hash}' WHERE `users`.`id` = {$id}";
+                            executeQuery($sql);
                             setcookie("hash", $hash, time() + 3600);
 
                         }
@@ -35,7 +34,7 @@ function prepareVariables($page,$action,$id){
                 }
                 exit;
             }
-
+            header('Location: /');
             break;
         case 'index':
             $params['name'] = 'Клен';
@@ -49,6 +48,9 @@ function prepareVariables($page,$action,$id){
             break;
         case 'cart':
             $params['cart'] = getCart();
+            break;
+        case 'confirmation':
+            $params['confirmCart'] = confirmCart($_POST);
             break;
         case 'feedback':
             doFeedbackAction($id, $action);

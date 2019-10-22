@@ -1,4 +1,8 @@
 <h2>Корзина</h2>
+<form action="/confirmation/" method="post">
+    <legend>Номер телефона: <input type="text" name="phone" required></legend>
+    <button type="submit">Оформить корзину</button>
+</form>
 <? foreach ($cart as $item):?>
     <div>
         <a href="/product/<?=$item['id']?>"><h3><?=$item['name']?></h3></a>

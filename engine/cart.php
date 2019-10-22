@@ -52,7 +52,11 @@ var_dump(getAssocResult($sql));
     }
 }
 
-function confirmCart(){
+function confirmCart($data){
     $session_id = session_id();
+
+    $sql = "INSERT INTO confirm_carts (session_id, phone) value ('$session_id','{$data['phone']}' )";
+    executeQuery($sql);
+    return 'Заказ подтвержден';
 
 }

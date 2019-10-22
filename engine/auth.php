@@ -2,16 +2,11 @@
 
 function auth($login, $pass)
 {
-    $db = getDb();
-    $login = mysqli_real_escape_string($db, strip_tags(stripslashes($login)));
-    /*
-        $options = [
-            'cost' => 11,
-            'salt' => SALT
-        ];
-    */
-    $result = mysqli_query($db, "SELECT * FROM users WHERE login = '{$login}'");
-    $row = mysqli_fetch_assoc($result);
+    $login = mysqli_real_escape_string(getDb(), strip_tags(stripslashes($login)));
+
+    $sql = "SELECT * FROM users WHERE login = '{$login}'";
+    $result = getAssocResult($sql);
+    $row =  $result[0];
 
     if (password_verify($pass, $row['pass'])) {
         $_SESSION['login'] = $login;
@@ -25,10 +20,8 @@ function is_auth()
 {
     if (isset($_COOKIE["hash"])) {
         $hash = $_COOKIE["hash"];
-        $db = getDb();
-        $sql = "SELECT * FROM `users` WHERE `hash`='{$hash}'";
-        $result = mysqli_query($db, $sql);
-        $row = mysqli_fetch_assoc($result);
+        $sql = "SELECT * FROM `users` WHERE hash ='{$hash}'";
+        $row = getAssocResult($sql);
         $user = $row['login'];
         if (!empty($user)) {
             $_SESSION['login'] = $user;
