@@ -4,10 +4,38 @@ function prepareVariables($page,$action,$id){
 
     $params = [
         'login' => 'admin',
-        'nav' => getMenu()
+        'nav' => getMenu(),
+        'count' => getCartCount(),
 
     ];
     switch ($page) {
+        case 'auth':
+            if ($action == "login") {
+                if (isset($_POST['send'])) {
+                    $login = $_POST['login'];
+                    $pass = $_POST['pass'];
+
+                    if (!auth($login, $pass)) {
+                        Die('Не верный логин пароль');
+                    } else {
+                        if (isset($_POST['save'])) {
+                            $hash = uniqid(rand(), true);
+                            $id = mysqli_real_escape_string(getDb(), strip_tags(stripslashes($_SESSION['id'])));
+                            $sql = "UPDATE `users` SET hash = '{$hash}' WHERE `users`.`id` = {$id}";
+                            executeQuery($sql);
+                            setcookie("hash", $hash, time() + 3600);
+
+                        }
+                        $allow = true;
+                        $user = get_user();
+
+
+                    }
+                }
+                exit;
+            }
+            header('Location: /');
+            break;
         case 'index':
             $params['name'] = 'Клен';
             break;
@@ -17,6 +45,12 @@ function prepareVariables($page,$action,$id){
         case 'product':
             $params['product'] = getProduct($id);
             $params['feedback'] = doFeedbackAction($id);
+            break;
+        case 'cart':
+            $params['cart'] = getCart();
+            break;
+        case 'confirmation':
+            $params['confirmCart'] = confirmCart($_POST);
             break;
         case 'feedback':
             doFeedbackAction($id, $action);
@@ -40,18 +74,19 @@ function prepareVariables($page,$action,$id){
                 $params['calculate'] = ['error' => ['Произведите рассчет']];
             }
             break;
-        case 'apicatalog':
-            $params['catalog'] = [
-                [
-                    'name' => 'Пицца',
-                    'price' => 24
-                ],
+        case 'api':
+            if ($action == "buy") {
+                addToCart($id);
 
-                [
-                    'name' => 'Яблоко',
-                    'price' => 12
-                ],
-            ];
+                echo json_encode(["result" => 1, "count" => getCartCount()]);
+                exit;
+            }
+            if ($action == "delete") {
+                deleteFromCart($id);
+
+                echo json_encode(["result" => 1, "count" => getCartCount()]);
+                exit;
+            }
 
             echo json_encode($params, JSON_UNESCAPED_UNICODE);
             exit;
