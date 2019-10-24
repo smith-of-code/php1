@@ -4,7 +4,7 @@
             <a href=""><img src="/<?=CATALOG_IMG?>/big/<?=$product['image']?>" alt="<?=$product['image']?>"></a>
             <p><?=$product['full_desc']?></p>
             <p>Цена: <?=$product['price']?></p>
-            <button >Купить</button>
+            <button class="buy" data-id="<?=$product['id']?>">Купить</button>
             <hr>
         </div>
 
@@ -27,3 +27,20 @@
     <a href="/feedback/update/<?=$item['id']?>">Редактировать</a>
 <? endforeach;?>
 </div>
+
+
+<script>
+    let buttons = document.querySelectorAll('.buy');
+
+    buttons.forEach((elem) => {
+        elem.addEventListener('click', () => {
+            let id = elem.getAttribute('data-id');
+            (async ()=>{
+                const response = await fetch('/api/buy/'+id);
+
+                const answer = await response.json();
+                document.getElementById('count').innerText = answer.count;
+            })();
+        })
+    });
+</script>
