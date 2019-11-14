@@ -1,11 +1,12 @@
 <?php
 
 function prepareVariables($page,$action,$id){
-
     $params = [
-        'login' => 'admin',
+        'login' => get_user(),
         'nav' => getMenu(),
         'count' => getCartCount(),
+        'admin' => is_admin(),
+        'allow' => is_auth()
 
     ];
     switch ($page) {
@@ -18,23 +19,35 @@ function prepareVariables($page,$action,$id){
                     if (!auth($login, $pass)) {
                         Die('Не верный логин пароль');
                     } else {
+
                         if (isset($_POST['save'])) {
                             $hash = uniqid(rand(), true);
                             $id = mysqli_real_escape_string(getDb(), strip_tags(stripslashes($_SESSION['id'])));
                             $sql = "UPDATE `users` SET hash = '{$hash}' WHERE `users`.`id` = {$id}";
                             executeQuery($sql);
-                            setcookie("hash", $hash, time() + 3600);
+                            setcookie("hash", $hash, time() + 3600, "/");
 
+                        }else{
+                            $hash = uniqid(rand(), true);
+                            $id = mysqli_real_escape_string(getDb(), strip_tags(stripslashes($_SESSION['id'])));
+                            $sql = "UPDATE `users` SET hash = '{$hash}' WHERE `users`.`id` = {$id}";
+                            executeQuery($sql);
                         }
-                        $allow = true;
-                        $user = get_user();
-
-
+                        header("Location: {$_SERVER['HTTP_REFERER']}");
                     }
                 }
                 exit;
             }
+            if ($action == "logout"){
+                session_unset();
+                session_destroy();
+                setcookie("hash", "", time() - 3600, "/");
+                header("Location: {$_SERVER['HTTP_REFERER']}");
+            }
             header('Location: /');
+            break;
+        case 'admin':
+            $params['carts'] = getConfirmCarts();
             break;
         case 'index':
             $params['name'] = 'Клен';
@@ -47,10 +60,17 @@ function prepareVariables($page,$action,$id){
             $params['feedback'] = doFeedbackAction($id);
             break;
         case 'cart':
-            $params['cart'] = getCart();
+            if (is_admin()){
+                $params['cart'] = getCart($action);
+            }else{
+                $params['cart'] = getCart();
+            }
+
             break;
         case 'confirmation':
-            $params['confirmCart'] = confirmCart($_POST);
+            confirmCart($_POST);
+            session_regenerate_id();
+            $params['confirmCart'] ='Заказ отправлен на обработку';
             break;
         case 'feedback':
             doFeedbackAction($id, $action);
@@ -84,7 +104,22 @@ function prepareVariables($page,$action,$id){
             if ($action == "delete") {
                 deleteFromCart($id);
 
-                echo json_encode(["result" => 1, "count" => getCartCount()]);
+                echo json_encode(["result" => 1, "count" => getCartCount(), "itemCount" => getItemCount($id)]);
+                exit;
+            }
+            if ($action == "getproducts"){
+                $products = getCart($_GET['session']);
+               echo json_encode($products);
+                exit;
+            }
+            if ($action == "aprovecart"){
+                aproveCart($id);
+                echo json_encode(["result" => 1, "cartStatus" => getCartStatus($id)]);
+                exit;
+            }
+            if ($action == "disaprovecart"){
+                disaproveCart($id);
+                echo json_encode(["result" => 1, "cartStatus" => getCartStatus($id)]);
                 exit;
             }
 

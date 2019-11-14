@@ -52,4 +52,21 @@ body {
     .gallery__item:hover {
       transform: scale(1.2); }
 
+.admin {
+  background-color: white;
+  border: 2px solid darkred;
+  color: darkred;
+  padding: 5px;
+  text-decoration: none;
+  transition: all 0.3s; }
+  .admin:hover {
+    background-color: darkred;
+    color: white;
+    border: 2px solid white; }
+
+.main-row {
+  background-color: black;
+  color: white;
+  font-size: 20px; }
+
 /*# sourceMappingURL=main.css.map */

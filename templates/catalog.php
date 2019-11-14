@@ -23,6 +23,7 @@
             let id = elem.getAttribute('data-id');
             (async ()=>{
                 const response = await fetch('/api/buy/'+id);
+
                 const answer = await response.json();
                 document.getElementById('count').innerText = answer.count;
             })();

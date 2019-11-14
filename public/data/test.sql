@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Окт 22 2019 г., 16:36
+-- Время создания: Окт 24 2019 г., 16:23
 -- Версия сервера: 5.7.25
 -- Версия PHP: 7.1.32
 
@@ -40,7 +40,29 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`id`, `session_id`, `product_id`, `count`) VALUES
-(42, 'p8mnl2oi06nv19vk9l260h7bpv6s56bb', 1, 3);
+(56, 'iq5h12e1u3v73cqsnv6d7qasfu0hppgl', 2, 38),
+(57, 'iq5h12e1u3v73cqsnv6d7qasfu0hppgl', 3, 22),
+(58, 'iq5h12e1u3v73cqsnv6d7qasfu0hppgl', 1, 70),
+(84, 'eqbam8i1i12k8kpshen9p6phmaka9562', 1, 21),
+(85, '1ol9v8u358c557mondec7e1bljc71ft4', 1, 20),
+(86, '1ol9v8u358c557mondec7e1bljc71ft4', 2, 19),
+(87, 'ahfum5kdmklhbj5enu0c01q2ivlslcl6', 1, 17),
+(88, 'ahfum5kdmklhbj5enu0c01q2ivlslcl6', 2, 17),
+(92, 'bva75m3lqcu8sq058jlstff9fnauktel', 1, 15),
+(93, 'bva75m3lqcu8sq058jlstff9fnauktel', 2, 13),
+(94, 'bva75m3lqcu8sq058jlstff9fnauktel', 3, 9),
+(95, 'gbteja158gvu3rk6egaj0cfd05ubvphd', 1, 10),
+(96, 'gbteja158gvu3rk6egaj0cfd05ubvphd', 2, 12),
+(97, 'gbteja158gvu3rk6egaj0cfd05ubvphd', 3, 7),
+(100, '1pcdaqd4tvclqdgnrsia6dh4sih5vjl6', 1, 6),
+(101, '1pcdaqd4tvclqdgnrsia6dh4sih5vjl6', 2, 8),
+(102, '1pcdaqd4tvclqdgnrsia6dh4sih5vjl6', 3, 6),
+(103, '4kihhbqkqi3s3n8ckchrmbdjnbgsrfpf', 1, 3),
+(104, '4kihhbqkqi3s3n8ckchrmbdjnbgsrfpf', 2, 6),
+(105, 'hh1grfckuu7cearussregakjcpsq2v6d', 1, 3),
+(106, 'hh1grfckuu7cearussregakjcpsq2v6d', 2, 4),
+(107, 'bcmkmdjmofnfgejju1pqkpktq8p2secc', 1, 3),
+(108, 'bcmkmdjmofnfgejju1pqkpktq8p2secc', 3, 4);
 
 -- --------------------------------------------------------
 
@@ -51,6 +73,8 @@ INSERT INTO `cart` (`id`, `session_id`, `product_id`, `count`) VALUES
 CREATE TABLE `confirm_carts` (
   `id` int(11) NOT NULL,
   `session_id` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `phone` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -58,8 +82,9 @@ CREATE TABLE `confirm_carts` (
 -- Дамп данных таблицы `confirm_carts`
 --
 
-INSERT INTO `confirm_carts` (`id`, `session_id`, `phone`) VALUES
-(17, 'p8mnl2oi06nv19vk9l260h7bpv6s56bb', '6567567');
+INSERT INTO `confirm_carts` (`id`, `session_id`, `name`, `status`, `phone`) VALUES
+(30, 'hh1grfckuu7cearussregakjcpsq2v6d', 'паврпва', 'disapproved', '44444'),
+(31, 'bcmkmdjmofnfgejju1pqkpktq8p2secc', 'вася', 'disapproved', '4564645');
 
 -- --------------------------------------------------------
 
@@ -108,14 +133,14 @@ CREATE TABLE `gallery` (
 
 INSERT INTO `gallery` (`id`, `name`, `views`) VALUES
 (1, '01.jpg', 1),
-(2, '02.jpg', 41),
-(3, '03.jpg', 8),
+(2, '02.jpg', 42),
+(3, '03.jpg', 9),
 (4, '04.jpg', 5),
 (5, '05.jpg', 32),
 (6, '06.jpg', 1),
 (7, '07.jpg', 4),
 (8, '08.jpg', 2),
-(9, '09.jpg', 42),
+(9, '09.jpg', 43),
 (10, '10.jpg', 4),
 (11, '11.jpg', 0),
 (12, '12.jpg', 5),
@@ -196,7 +221,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `pass`, `hash`) VALUES
-(1, 'user', '$2y$10$epnTaveZrF2nyyd0ePk4tOwHOlJC48JtBA1HoYs7BXC8MEzzOEcTW', '10098039745daf039d342164.47505348');
+(1, 'admin', '$2y$10$epnTaveZrF2nyyd0ePk4tOwHOlJC48JtBA1HoYs7BXC8MEzzOEcTW', '12890046245db1a4a56f2299.27209101'),
+(2, 'user', '$2y$10$epnTaveZrF2nyyd0ePk4tOwHOlJC48JtBA1HoYs7BXC8MEzzOEcTW', '3682818575db1a4d79526e9.08916095');
 
 --
 -- Индексы сохранённых таблиц
@@ -252,13 +278,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT для таблицы `confirm_carts`
 --
 ALTER TABLE `confirm_carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT для таблицы `feedback`
@@ -288,7 +314,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

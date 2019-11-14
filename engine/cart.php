@@ -1,10 +1,13 @@
 <?php
-function getCart() {
-    $session_id = session_id();
+function getCart($session_id = null) {
+    if (empty($session_id)){
+        $session_id = session_id();
+    }
+
     $sql = "SELECT 
-       cart.id as id,
+       cart.id as cart_id,
        cart.count as count,
-       products.id as product_id,
+       products.id as id,
        products.name as name,
        products.image as image,
        products.price as price 
@@ -21,6 +24,13 @@ function getCartCount() {
     return $sum[0]['SUM(count)'];
 
 }
+function getItemCount($id){
+    $session_id = session_id();
+    $sql ="SELECT count from cart WHERE session_id = '$session_id' and id = $id";
+
+    return getAssocResult($sql)[0]['count'];
+}
+
 
 function addToCart($id) {
     $id = (int)$id;
@@ -29,12 +39,15 @@ function addToCart($id) {
     $sql = "select * from cart where session_id = '$session_id' and product_id = $id";
 
     if (empty(getAssocResult($sql))) {
+
         $sql = "INSERT INTO cart (session_id, product_id, count) value ('$session_id', $id, 1)";
-        executeQuery($sql);
+
     } else {
+
         $sql = "UPDATE `cart` SET `count` = `count`+1 WHERE `cart`.`product_id` = $id";
-        executeQuery($sql);
+
     }
+    return executeQuery($sql);
 }
 
 function deleteFromCart($id){
@@ -42,21 +55,24 @@ function deleteFromCart($id){
     $session_id = session_id();
 
     $sql = "select * from cart where session_id = '$session_id' and id = $id";
-var_dump(getAssocResult($sql));
+
     if (getAssocResult($sql)[0]['count'] > 1) {
+
         $sql = "UPDATE `cart` SET `count` = `count`-1 WHERE `cart`.`id` = $id";
-        executeQuery($sql);
+
     } else {
+
         $sql = "DELETE FROM cart WHERE id = $id";
-        executeQuery($sql);
+
     }
+    return executeQuery($sql);
 }
 
 function confirmCart($data){
     $session_id = session_id();
 
-    $sql = "INSERT INTO confirm_carts (session_id, phone) value ('$session_id','{$data['phone']}' )";
+    $sql = "INSERT INTO confirm_carts (session_id, name, phone, status) value ('$session_id','{$data['name']}','{$data['phone']}','processing' )";
     executeQuery($sql);
-    return 'Заказ подтвержден';
+
 
 }

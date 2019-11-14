@@ -17,10 +17,27 @@ function renderMainMenu($menu){
     return $result;
 }
 ?>
-<p></p>
+
+<?if (!$allow) :?>
+
+    <form action="/auth/login/" method="post">
+        <input type='text' name='login' placeholder='Логин'>
+        <input type='password' name='pass' placeholder='Пароль'>
+        Save? <input type='checkbox' name='save'>
+        <input type='submit' name='send'>
+    </form>
+
+<? else: ?>
+    Добро пожаловать! <?=$user?> <a href="/auth/logout">Выход</a><br>
+<? endif; ?>
 <ul class="menu">
     <?= renderMainMenu($nav)?>
-    <li>товаров в корзине <?=$count?></li>
+    <li> товаров в корзине <span id="count"><?=$count?></span></li>
+    <? if ($admin):?>
+        <li ><a class="admin" href="/admin/">Админка</a></li>
+    <? endif;?>
+
+
 
 </ul>
 

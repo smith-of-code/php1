@@ -22,7 +22,7 @@ function is_auth()
         $hash = $_COOKIE["hash"];
         $sql = "SELECT * FROM `users` WHERE hash ='{$hash}'";
         $row = getAssocResult($sql);
-        $user = $row['login'];
+        $user = $row[0]['login'];
         if (!empty($user)) {
             $_SESSION['login'] = $user;
         }
@@ -33,4 +33,10 @@ function is_auth()
 function get_user()
 {
     return is_auth() ? $_SESSION['login'] : false;
+}
+
+function is_admin(){
+    if (is_auth()){
+        return $_SESSION['login'] === 'admin' ? true : false;
+    }
 }
